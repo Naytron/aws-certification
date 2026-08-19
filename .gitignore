@@ -1,0 +1,22 @@
+# AWS credentials and local configuration
+.aws/
+**/.aws/
+credentials
+**/credentials
+
+# Local secrets and certificates
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Learner-specific evidence and temporary lab artifacts
+learner-evidence/
+.local/
+session.json
+trust.json
+permission.json
+skeleton.json
+taskdef.json

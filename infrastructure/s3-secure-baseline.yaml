@@ -1,0 +1,117 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Small secure S3 learning baseline with encryption, public access blocking,
+  TLS enforcement, required course tags, and no data by default.
+
+Parameters:
+  CourseTag:
+    Type: String
+    Default: aws-solutions-architect
+    MinLength: 1
+    MaxLength: 128
+    Description: Value for the required Course tag.
+  ModuleTag:
+    Type: String
+    Default: shared-tooling
+    MinLength: 1
+    MaxLength: 128
+    Description: Value for the required Module tag.
+  OwnerTag:
+    Type: String
+    MinLength: 2
+    MaxLength: 64
+    AllowedPattern: '^[A-Za-z0-9][A-Za-z0-9._@+-]{1,63}$'
+    ConstraintDescription: Use 2-64 ASCII letters, numbers, or . _ @ + -.
+    Description: Non-sensitive learner or team identifier for the Owner tag.
+  ExpiresAtTag:
+    Type: String
+    AllowedPattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    ConstraintDescription: Use an ISO date in YYYY-MM-DD format.
+    Description: Review date for the ExpiresAt tag; it does not delete resources.
+  EnableVersioning:
+    Type: String
+    Default: 'false'
+    AllowedValues:
+      - 'true'
+      - 'false'
+    Description: Enable only when the lab requires version history.
+
+Conditions:
+  VersioningEnabled: !Equals [!Ref EnableVersioning, 'true']
+
+Resources:
+  LearningBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: AbortIncompleteMultipartUploads
+            Status: Enabled
+            Prefix: ''
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Fn::If:
+          - VersioningEnabled
+          - Status: Enabled
+          - Ref: AWS::NoValue
+      Tags:
+        - Key: Course
+          Value: !Ref CourseTag
+        - Key: Module
+          Value: !Ref ModuleTag
+        - Key: Owner
+          Value: !Ref OwnerTag
+        - Key: ExpiresAt
+          Value: !Ref ExpiresAtTag
+        - Key: CostLabel
+          Value: FREE-PLAN SAFE
+
+  LearningBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref LearningBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource:
+              - !GetAtt LearningBucket.Arn
+              - !Sub '${LearningBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+Outputs:
+  BucketName:
+    Description: Generated name of the learning bucket.
+    Value: !Ref LearningBucket
+  BucketArn:
+    Description: ARN of the learning bucket.
+    Value: !GetAtt LearningBucket.Arn
+  RegionalDomainName:
+    Description: Regional DNS name of the learning bucket.
+    Value: !GetAtt LearningBucket.RegionalDomainName
+  VersioningSetting:
+    Description: Parameter value used for bucket versioning.
+    Value: !Ref EnableVersioning
+  StackRegion:
+    Description: Region in which this stack was created.
+    Value: !Ref AWS::Region
