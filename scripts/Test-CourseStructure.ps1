@@ -125,7 +125,12 @@ foreach ($relativeDirectory in $recommendedDirectories) {
 }
 
 $markdownFiles = @(
-    Get-ChildItem -LiteralPath $resolvedRoot -Filter '*.md' -File -Recurse -ErrorAction Stop
+    Get-ChildItem -LiteralPath $resolvedRoot -Filter '*.md' -File -Recurse -ErrorAction Stop |
+        Where-Object {
+            $relativeCandidate = $_.FullName.Substring($resolvedRoot.Length).
+                TrimStart('\', '/')
+            $relativeCandidate -notmatch '(^|[\\/])(\.git|node_modules|dist|coverage)([\\/]|$)'
+        }
 )
 $linkPattern = [regex]'\[[^\]]+\]\((?<target>[^)]+)\)'
 foreach ($markdownFile in $markdownFiles) {

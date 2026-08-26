@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A 100-question AWS Solutions Architect quiz spanning Levels 100 through 400."
+    />
+    <script>
+      (() => {
+        const param = new URLSearchParams(window.location.search).get("scoutTheme");
+        const theme =
+          param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script>
+      (() => {
+        const explicitTheme = new URLSearchParams(window.location.search).get("scoutTheme");
+        if (explicitTheme) return;
+
+        try {
+          const storedTheme = window.localStorage.getItem("aws-quiz-theme");
+          document.documentElement.setAttribute("data-theme", storedTheme || "dark");
+        } catch {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+    </script>
+    <title>AWS Architecture Quiz</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

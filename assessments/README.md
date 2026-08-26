@@ -2,6 +2,17 @@
 
 Assessments measure decision quality, not file completion.
 
+## Interactive quiz
+
+Use the **[AWS Architecture Quiz](https://naytron.github.io/aws-certification/)**
+for Level 100-400 practice or a mixed 100-question attempt. It supports optional
+timing, single-choice and multiple-response questions, flags, local resume,
+post-submit explanations, history, and JSON export.
+
+Quiz data remains in the learner's browser. Because the application is static,
+answers can be inspected in downloaded JavaScript; treat scores as self-assessment
+evidence rather than a proctored or authoritative certification result.
+
 ## Rules
 
 - Take quizzes and scenario sets closed-book first.

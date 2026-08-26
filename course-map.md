@@ -2,6 +2,13 @@
 
 Follow the modules in order. Optional deep dives can be deferred, but phase gates should not be skipped.
 
+## Interactive assessment
+
+The **[AWS Architecture Quiz](https://naytron.github.io/aws-certification/)**
+contains 25 questions at each course level and a mixed 100-question mode. Use it
+after a phase gate or for spaced retrieval; answers and explanations appear only
+after submitting the attempt.
+
 ## Phase 0 - Safe onboarding
 
 | Order | Module | Level | Primary result |

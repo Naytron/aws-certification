@@ -24,6 +24,9 @@ AWS recommends at least one year of hands-on design experience for SAA and two o
 6. Use the [study method](reference/study-method.md) and complete modules in course-map order.
 7. Record evidence using [the lab evidence template](templates/lab-evidence-template.md).
 
+Use the **[interactive AWS Architecture Quiz](https://naytron.github.io/aws-certification/)**
+for Level 100, 200, 300, or 400 practice and mixed 100-question attempts.
+
 Do not deploy a lab before reading its cost label and cleanup section.
 
 ## Recommended study cycle
@@ -75,6 +78,10 @@ Console-first introductions are repeated with AWS CLI, CloudShell, or CloudForma
 ## Readiness rules
 
 Do not schedule an exam because you reached the end of a folder. Use the scorecards in `assessments/`.
+
+Interactive quiz scores are local self-assessment evidence. They do not replace
+fresh authorized practice sets, hands-on challenge labs, capstones, or the
+experience requirements in the readiness scorecards.
 
 SAA readiness requires:
 
